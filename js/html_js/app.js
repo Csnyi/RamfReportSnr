@@ -19,11 +19,6 @@
 
       var ipText = localStorage.getItem("ip");
       var ip_valid = isValidIP(ipText);
-      var uzenet = new sendMessage(
-        '#success', "Valid IP: "+ipText+"!",
-        ip_valid, "Invalid IP: "+ipText+"!", 5000
-      );
-      uzenet.send();
       var ip = (!ip_valid)?alert("Invalid IP: "+ipText+"!"):ipText;
       var freq = Number(localStorage.getItem("freq"));
       var freq_lo = Number(localStorage.getItem("freq_lo"));
