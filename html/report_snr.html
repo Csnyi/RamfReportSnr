@@ -22,107 +22,112 @@
 
 <div class="row">
 
-  <div class="col-2 col-s-3 menu">
-    <ul>
-
-      <li>
-        <label for="ip">IP:</label>
-        <input type="text" name="ip" id="ip" size="17"/>
-      </li>
-      <li>
-        <label for="freq">Frequency:</label>
-        <input type="number" name="freq" id="freq" size="8"/>
-        <label for="freq_lo">Local Oscillator:</label>
-        <select id="freq_lo" name="freq_lo">
-            <option value="5150">5150</option>
-            <option value="5750">5750</option>
-            <option value="5950">5950</option>
-            <option value="9750">9750</option>
-            <option value="10000">10000</option>
-            <option value="10050">10050</option>
-            <option value="10450">10450</option>
-            <option value="10600">10600</option>
-            <option value="10700">10700</option>
-            <option value="10750">10750</option>
-            <option value="11250">11250</option>
-            <option value="11300">11300</option>
-        </select>
-      </li>
-      <li>
-        <label for="sr">Symbol rate:</label>
-        <input type="number" name="sr" id="sr" size="8"/>
-      </li>
-      <li>
-        <label for="pol">Polarization:</label>
-        <select id="pol" name="pol">
-            <option value="0">Horizontal</option>
-            <option value="1">Vertical</option>
-        </select>
-      </li>
-      <li>
-        <label for="tone">Tone:</label>
-        <select id="tone" name="tone" >
-            <option value="1">On</option>
-            <option value="0">Off</option>
-        </select>
-      </li>
-      <li>
-        <label for="dsq">DISEqC Port - command:</label>
-        <select name="dsq" id="dsq">
-          <optgroup label="1.0, up to 4 ports (one single 4x1 DiSEqC switch)">
-            <option value="E01038F0">01 - E01038F0</option>
-            <option value="E01038F4">02 - E01038F4</option>
-            <option value="E01038F8">03 - E01038F8</option>
-            <option value="E01038FC">04 - E01038FC</option>
-          </optgroup>
-          <optgroup label="1.1, up to 16 ports (8 uncommitted +8 committed)">
-            <optgroup label="UNCOMMITTED">
-              <option value="E01039F0">01 - E01039F0</option>
-              <option value="E01039F1">02 - E01039F1</option>
-              <option value="E01039F2">03 - E01039F2</option>
-              <option value="E01039F3">04 - E01039F3</option>
-              <option value="E01039F4">05 - E01039F4</option>
-              <option value="E01039F5">06 - E01039F5</option>
-              <option value="E01039F6">07 - E01039F6</option>
-              <option value="E01039F7">08 - E01039F7</option>
+  <div class="col-2 col-s-3">
+    <div class="list">
+      <ul>
+        <li>
+          <label for="ip">IP:</label>
+          <input type="text" name="ip" id="ip" size="17"/>
+        </li>
+        <li>
+          <label for="freq">Frequency:</label>
+          <input type="number" name="freq" id="freq" size="8"/>
+          <label for="freq_lo">Local Oscillator:</label>
+          <select id="freq_lo" name="freq_lo">
+              <option value="5150">5150</option>
+              <option value="5750">5750</option>
+              <option value="5950">5950</option>
+              <option value="9750">9750</option>
+              <option value="10000">10000</option>
+              <option value="10050">10050</option>
+              <option value="10450">10450</option>
+              <option value="10600">10600</option>
+              <option value="10700">10700</option>
+              <option value="10750">10750</option>
+              <option value="11250">11250</option>
+              <option value="11300">11300</option>
+          </select>
+        </li>
+        <li>
+          <label for="sr">Symbol rate:</label>
+          <input type="number" name="sr" id="sr" size="8"/>
+        </li>
+        <li>
+          <label for="pol">Polarization:</label>
+          <select id="pol" name="pol">
+              <option value="0">Horizontal</option>
+              <option value="1">Vertical</option>
+          </select>
+        </li>
+        <li>
+          <label for="tone">Tone:</label>
+          <select id="tone" name="tone" >
+              <option value="1">On</option>
+              <option value="0">Off</option>
+          </select>
+        </li>
+        <li>
+          <label for="dsq">DISEqC Port - command:</label>
+          <select name="dsq" id="dsq">
+            <optgroup label="1.0, up to 4 ports (one single 4x1 DiSEqC switch)">
+              <option value="E01038F0">01 - E01038F0</option>
+              <option value="E01038F4">02 - E01038F4</option>
+              <option value="E01038F8">03 - E01038F8</option>
+              <option value="E01038FC">04 - E01038FC</option>
             </optgroup>
-            <optgroup label="COMMITTED">
-              <option value="E01039F8">09 - E01039F8</option>
-              <option value="E01039F9">10 - E01039F9</option>
-              <option value="E01039FA">11 - E01039FA</option>
-              <option value="E01039FB">12 - E01039FB</option>
-              <option value="E01039FC">13 - E01039FC</option>
-              <option value="E01039FD">14 - E01039FD</option>
-              <option value="E01039FE">15 - E01039FE</option>
-              <option value="E01039FF">16 - E01039FF</option>
+            <optgroup label="1.1, up to 16 ports (8 uncommitted +8 committed)">
+              <optgroup label="UNCOMMITTED">
+                <option value="E01039F0">01 - E01039F0</option>
+                <option value="E01039F1">02 - E01039F1</option>
+                <option value="E01039F2">03 - E01039F2</option>
+                <option value="E01039F3">04 - E01039F3</option>
+                <option value="E01039F4">05 - E01039F4</option>
+                <option value="E01039F5">06 - E01039F5</option>
+                <option value="E01039F6">07 - E01039F6</option>
+                <option value="E01039F7">08 - E01039F7</option>
+              </optgroup>
+              <optgroup label="COMMITTED">
+                <option value="E01039F8">09 - E01039F8</option>
+                <option value="E01039F9">10 - E01039F9</option>
+                <option value="E01039FA">11 - E01039FA</option>
+                <option value="E01039FB">12 - E01039FB</option>
+                <option value="E01039FC">13 - E01039FC</option>
+                <option value="E01039FD">14 - E01039FD</option>
+                <option value="E01039FE">15 - E01039FE</option>
+                <option value="E01039FF">16 - E01039FF</option>
+              </optgroup>
             </optgroup>
-          </optgroup>
-        </select>
-      </li>
-      <li>
-        <label for="slnbe">3D converter polling:</label>
-        <select id="slnbe" name="slnbe" >
-            <option value="1">Enabled</option>
-            <option value="0">Disabled</option>
-        </select>
-      </li>
-      
-      <li>
-        <label for="setTime">Measurement time (min):</label>
-        <input type="number" name="setTime" id="setTime" size="6"/>
-      </li>
-      <li id="report">Time Limit / SNR Report</li>
-      <li id="snrReport">SNR Report</li>
-      <li id="stop">Stop Report</li>
-      <li class="del" id="clearls">Delete data</li>
-      <li id="save">Save</li>
-      <div  class="downloadJson" id="downloadJson"></div>
-      <div  class="exportJson" id="exportJson"></div>
-      <a href="report_view.html" target="_blank"><li class="load" id="load">View Report</li></a>
-    </ul>
+          </select>
+        </li>
+        <li>
+          <label for="slnbe">3D converter polling:</label>
+          <select id="slnbe" name="slnbe" >
+              <option value="1">Enabled</option>
+              <option value="0">Disabled</option>
+          </select>
+        </li>
+        <li>
+          <label for="setTime">Measurement time (min):</label>
+          <input type="number" name="setTime" id="setTime" size="6"/>
+        </li>
+      </ul>
+    </div>
+    <div class="menu">
+      <ul>
+        <a href="#top"><li id="report">Time Limit / SNR Report</li></a>
+        <a href="#top"><li id="snrReport">SNR Report</li></a>
+        <a href="#top"><li id="stop">Stop Report</li></a>
+        <li class="del" id="clearls">Delete data</li>
+        <li id="save">Save</li>
+        <div  class="downloadJson" id="downloadJson"></div>
+        <div  class="exportJson" id="exportJson"></div>
+        <a href="report_view.html" target="_blank"><li class="load" id="load">View Report</li></a>
+      </ul>
+    </div>
   </div>
 
   <div class="col-8 col-s-9">
+    <div id="top"></div>
     <div class="alert" id="alert"></div>
     <div class="success" id="success"></div>
     <h1>Result</h1>
@@ -149,12 +154,16 @@
       <h2>Info: </h2>
       <p> Enter the required data! Click the [SNR Report] button or enter the measurement time in minutes and start [Time Limit / SNR Report] to display the diagram! </p>
       <p><span>Number of measurement results: </span><span id="length"></span></p>
+      <div><h3>Other initial values:</h3>
+        <p>(Save the data in a JSON file and you can view them in detail on the [View Report] page.)</p>
+      </div>
       <ul>
         <li>Alfa: <span id="alfa"></span></li>
         <li>Beta: <span id="beta"></span></li>
         <li>Gamma: <span id="gamma"></span></li>
         <li>C/N: <span id="lock"></span></li>
         <li>LNB Current: <span id="lnb_current"></span></li>
+        <div><h3>Period:</h3></div>
         <li>From Date: <span id="fromdate"></span></li>
         <li>To Date: <span id="todate"></span></li>
       </ul>

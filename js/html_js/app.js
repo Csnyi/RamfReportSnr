@@ -17,9 +17,7 @@
       $("#countsDown").html("");
       $("#status").html("");
 
-      var ipText = localStorage.getItem("ip");
-      var ip_valid = isValidIP(ipText);
-      var ip = (!ip_valid)?alert("Invalid IP: "+ipText+"!"):ipText;
+      var ip = localStorage.getItem("ip");
       var freq = Number(localStorage.getItem("freq"));
       var freq_lo = Number(localStorage.getItem("freq_lo"));
       var freq_if = (freq - freq_lo);
@@ -396,10 +394,19 @@ function getAllStorageData() {
 // get Form elements
 
 function getFormValue(key){
-  $("#"+key).change(function(){
-    var p = $('#'+key).val();
-    localStorage.setItem(key, p);
-  });
+  if (key == 'ip') {
+    $("#"+key).change(function(){
+      var p = $('#'+key).val();
+      var ip_valid = isValidIP(p);
+      var ip = (!ip_valid)?alert("Invalid IP: "+p+"!"):p;
+      localStorage.setItem(key, ip);
+    });
+  }else{
+    $("#"+key).change(function(){
+      var p = $('#'+key).val();
+      localStorage.setItem(key, p);
+    });
+  }
   var p = localStorage.getItem(key);
   $("#"+key).val(p);
 }

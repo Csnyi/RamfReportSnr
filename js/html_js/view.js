@@ -36,9 +36,7 @@ function readJson() {
 
         var tables = document.querySelectorAll("#datalist");
         for (let i = 0; i < tables.length; i++) {
-          $(tables[i]).DataTable({
-            language: hu
-          });
+          $(tables[i]).DataTable();
         }
                 
         var measureLength = AllData.length;
