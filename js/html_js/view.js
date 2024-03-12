@@ -30,7 +30,9 @@ function readJson() {
         fromdate = new Date(timestamp[0]).toLocaleString();
         todate = new Date(timestamp[timestamp.length-1]).toLocaleString();
 
-        viewData(alfa, beta, gamma, lockVal, lnb_current, fromdate, todate, timestamp);
+        viewFirstData(alfa, beta, gamma, lock, lnb_current, fromdate, todate);
+        
+        viewAllData(alfa, beta, gamma, lockVal, lnb_current, fromdate, todate, timestamp);
                 
         var measureLength = AllData.length;
         $("#length").html(measureLength);
@@ -58,17 +60,28 @@ function readJson() {
 /** load data */
 
   function viewSelect(data, text, timestamp){
-    var dataHtml = "<select>";
+    var dataHtml = "<table><head><tr><th>érték</th><th>idő</th></tr></head><body>";
     for (let x =0; x<data.length;  x++){
         var dataVal = data[x] + text ;
         var atTime = new Date(timestamp[x]).toLocaleString();
-        dataHtml += "<option>"+dataVal+" - "+atTime+"</option>";
+        dataHtml += "<tr><td>"+dataVal+"</td><td>"+atTime+"</td></tr>";
     };
-    dataHtml += "</select>";
+    dataHtml += "</body></table>";
     return dataHtml;
   };
 
-  function viewData(alfa, beta, gamma, lock, lnb_current, fromdate, todate, timestamp) {
+  function viewFirstData(alfa, beta, gamma, lock, lnb_current, fromdate, todate) {
+    $("#alfa_first").html(alfa[0]+ "°");
+    $("#beta_first").html(beta[0]+ "°");
+    $("#gamma_first").html(gamma[0]+ "°");
+    var lockVal = (lock[0] == 0) ? "not locked" : "locked" ;
+    $("#lock_first").html(lockVal);
+    $("#lnb_current_first").html(lnb_current[0] + " mA");
+    $("#fromdate_first").html(fromdate);
+    $("#todate_first").html(todate);
+  }
+
+  function viewAllData(alfa, beta, gamma, lock, lnb_current, fromdate, todate, timestamp) {
     var alfaHtml = viewSelect(alfa, "°", timestamp);
     $("#alfa").html(alfaHtml);
     var betaHtml = viewSelect(beta, "°", timestamp);

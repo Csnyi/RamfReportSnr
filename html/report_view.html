@@ -51,20 +51,71 @@
     </div>
   </div>
 
-  <div class="col-2 col-s-12 list">
+  <div class="col-2 col-s-12">
     <div class="aside">
       <h2>Info:</h2>
       <p> Select the JSON file and start displaying the charts! </p>
       <p><span>Number of measurement results: </span><span id="length"></span></p>
-      <ul>
-        <li>Alfa: <span id="alfa"></span></li>
-        <li>Beta: <span id="beta"></span></li>
-        <li>Gamma: <span id="gamma"></span></li>
-        <li>C/N: <span id="lock"></span></li>
-        <li>LNB Current: <span id="lnb_current"></span></li>
-        <li>From Date: <span id="fromdate"></span></li>
-        <li>To Date: <span id="todate"></span></li>
-      </ul>
+      <div class="menu">
+        <ul>
+          <li id="modalBtn">Alfa: <span id="alfa_first"></span>
+            <!-- The Modal -->
+            <div id="trunkModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="alfa"></span>
+              </div>
+            </div>
+          </li>
+          <li id="modalBtn">Beta: <span id="beta_first"></span>
+            <!-- The Modal -->
+            <div id="trunkModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="beta"></span>
+              </div>
+            </div>
+          </li>
+          <li id="modalBtn">Gamma: <span id="gamma_first"></span>
+            <!-- The Modal -->
+            <div id="trunkModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="gamma"></span>
+              </div>
+            </div>
+          </li>
+          <li id="modalBtn">C/N: <span id="lock_first"></span>
+            <!-- The Modal -->
+            <div id="trunkModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="lock"></span>
+              </div>
+            </div>
+          </li>
+          <li id="modalBtn">LNB Current: <span id="lnb_current_first"></span>
+            <!-- The Modal -->
+            <div id="trunkModal" class="modal">
+              <!-- Modal content -->
+              <div class="modal-content">
+                <span class="close">&times;</span>
+                <span id="lnb_current"></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="list">
+        <ul>
+          <li>From Date: <span id="fromdate"></span></li>
+          <li>To Date: <span id="todate"></span></li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -73,10 +124,10 @@
 <div class="footer">
   <p>
    Copyleft SNR Report with sr-525hd 2024 | 
-    <span class="about_this" id="about_this">About this</span>
+    <span class="about_this" id="modalBtn">About this</span>
   </p>
   <!-- The Modal -->
-  <div id="contactModal" class="modal">
+  <div id="trunkModal" class="modal">
 
     <!-- Modal content -->
     <div class="modal-content">
