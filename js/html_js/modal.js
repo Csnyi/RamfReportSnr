@@ -7,16 +7,6 @@ $(function(){
   // Get the <span> element that closes the modal
   var spans = document.querySelectorAll(".close");
   
-    // Set up a single event listener for clicks outside modals
-    window.addEventListener("click", function(event) {
-      for (let i = 0; i < modals.length; i++) {
-        let modal = modals[i];
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      }
-    });
-  
     // Set up event listener for 'esc' key press
     document.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
@@ -46,8 +36,14 @@ $(function(){
         if(event.target == span) {
           modal.style.display = "none";
         }
-    
+
+        // Set up a single event listener for clicks outside modals
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+
       }
+
     });
 
   });

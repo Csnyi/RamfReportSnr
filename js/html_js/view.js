@@ -33,6 +33,13 @@ function readJson() {
         viewFirstData(alfa, beta, gamma, lock, lnb_current, fromdate, todate);
         
         viewAllData(alfa, beta, gamma, lockVal, lnb_current, fromdate, todate, timestamp);
+
+        var tables = document.querySelectorAll("#datalist");
+        for (let i = 0; i < tables.length; i++) {
+          $(tables[i]).DataTable({
+            language: hu
+          });
+        }
                 
         var measureLength = AllData.length;
         $("#length").html(measureLength);
@@ -60,13 +67,12 @@ function readJson() {
 /** load data */
 
   function viewSelect(data, text, timestamp){
-    var dataHtml = "<table><head><tr><th>érték</th><th>idő</th></tr></head><body>";
+    var dataHtml = "";
     for (let x =0; x<data.length;  x++){
         var dataVal = data[x] + text ;
         var atTime = new Date(timestamp[x]).toLocaleString();
         dataHtml += "<tr><td>"+dataVal+"</td><td>"+atTime+"</td></tr>";
     };
-    dataHtml += "</body></table>";
     return dataHtml;
   };
 

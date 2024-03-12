@@ -19,7 +19,7 @@ var modalBody = `
         The project is subject to Copyleft regulation. 
         It is built on Open Web API 1.17.
         Data is temporarily stored in localstorage and indexedDB.
-        If someone distributes or further develops it, do so under the same conditions!
+        If someone distributes or further develops it, do with the same conditions!
     </p>
     <p>
         We welcome all observations and comments: (email).

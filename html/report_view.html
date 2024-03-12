@@ -3,13 +3,16 @@
 <head>
     <title>R.A.M.F. View Report</title>
     <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../css/dataTables.dataTables.css">
     <link rel="stylesheet" type="text/css" href="../css/report_snr.css">
     <link rel="stylesheet" type="text/css" href="../css/modal.css">
     <meta name='robots' content='noindex' charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/dataTables.js"></script>
     <script src="../js/plotly-latest.min.js"></script>
     <script src="../js/xlsx.full.min.js"></script>
+    <script src="../js/html_js/hu.js"></script>
     <script src="../js/html_js/info.js"></script>
     <script src="../js/html_js/drawchart.js"></script>
     <script src="../js/html_js/view.js"></script>
@@ -54,8 +57,11 @@
   <div class="col-2 col-s-12">
     <div class="aside">
       <h2>Info:</h2>
-      <p> Select the JSON file and start displaying the charts! </p>
+      <p> Select the JSON file and the data will appear! </p>
       <p><span>Number of measurement results: </span><span id="length"></span></p>
+      <div><h3>First measured data:</h3>
+        <p>(click for details)</p>
+      </div>
       <div class="menu">
         <ul>
           <li id="modalBtn">Alfa: <span id="alfa_first"></span>
@@ -64,7 +70,16 @@
               <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">&times;</span>
-                <span id="alfa"></span>
+                <h3>Alfa:</h3>
+                <table id="datalist" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Value</th>
+                          <th>Time</th>
+                      </tr>
+                  </thead>
+                  <tbody id="alfa"></tbody>
+                </table>
               </div>
             </div>
           </li>
@@ -74,7 +89,16 @@
               <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">&times;</span>
-                <span id="beta"></span>
+                <h3>Beta:</h3>
+                <table id="datalist" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Value</th>
+                          <th>Time</th>
+                      </tr>
+                  </thead>
+                  <tbody id="beta"></tbody>
+                </table>
               </div>
             </div>
           </li>
@@ -84,7 +108,16 @@
               <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">&times;</span>
-                <span id="gamma"></span>
+                <h3>Gamma:</h3>
+                <table id="datalist" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Value</th>
+                          <th>Time</th>
+                      </tr>
+                  </thead>
+                  <tbody id="gamma"></tbody>
+                </table>
               </div>
             </div>
           </li>
@@ -94,7 +127,16 @@
               <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">&times;</span>
-                <span id="lock"></span>
+                <h3>C/N:</h3>
+                <table id="datalist" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Value</th>
+                          <th>Time</th>
+                      </tr>
+                  </thead>
+                  <tbody id="lock"></tbody>
+                </table>
               </div>
             </div>
           </li>
@@ -104,12 +146,22 @@
               <!-- Modal content -->
               <div class="modal-content">
                 <span class="close">&times;</span>
-                <span id="lnb_current"></span>
+                <h3>LNB Current:</h3>
+                <table id="datalist" class="display" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Value</th>
+                          <th>Time</th>
+                      </tr>
+                  </thead>
+                  <tbody id="lnb_current"></tbody>
+                </table>
               </div>
             </div>
           </li>
         </ul>
       </div>
+      <div><h3>Period:</h3></div>
       <div class="list">
         <ul>
           <li>From Date: <span id="fromdate"></span></li>
