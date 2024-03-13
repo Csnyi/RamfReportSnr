@@ -22,19 +22,21 @@ var modalBody = `
         If someone distributes or further develops it, do with the same conditions!
     </p>
     <p>
-        We welcome all observations and comments: (email).
+        We welcome all observations and comments: (GitHub link).
     </p>
     <p>
-        The project is available: (link).
+        The project is available: (GitHub link).
     </p>
 `;
 
 var modalFooter = `
     <p>
         Powered by 
-        <a href="http://plot.ly" target="_blank">PlotlyJS</a> | 
-        <a href="http://sheetjs.com" target="_blank">SheetJS</a> | 
-        <a href="https://www.w3schools.com/css/css_rwd_intro.asp" target="_blank"> W3Schools</a>
+        <a href="https://www.w3schools.com/css/css_rwd_intro.asp" target="_blank"> W3Schools</a> | 
+        <a href="https://jquery.com" target="_blank">jQuery</a> | 
+        <a href="https://plotly.com" target="_blank">PlotlyJS</a> | 
+        <a href="https://sheetjs.com" target="_blank">SheetJS</a> | 
+        <a href="https://datatables.net/" target="_blank">DataTables</a>
     </p>
 `;
 

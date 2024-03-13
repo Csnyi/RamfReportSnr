@@ -27,10 +27,10 @@
 
   <div class="col-2 col-s-3 menu">
     <ul>
-        <li id="open" onclick="">
-            <label for="fileinput">Open JSON <span id="fname"></span> </label>
-            <input class="custom-file-input" type="file" id="fileinput" />
-        </li>
+        <label for="fileinput">
+            <li id="open" onclick="">Open JSON <span id="fname"></span></li>
+        </label>
+        <input class="custom-file-input" type="file" id="fileinput" />
         <a href="report_snr.html"><li class="load" id="load">Snr Report</li></a>
     </ul>
   </div>
@@ -57,9 +57,14 @@
     <div class="aside">
       <h2>Info:</h2>
       <p> Select the JSON file and the data will appear! </p>
-      <p><span>Number of measurement results: </span><span id="length"></span></p>
+      <div class="list">
+        <ul>
+            <li><span>Number of data: </span><span id="length"></span></li>
+        </ul>
+      </div>
       <div><h3>Other values:</h3>
         <p>(Click for details!)</p>
+        <p>Before opening the new json, please refresh the page [F5]!</p>
       </div>
       <div class="menu">
         <ul>
@@ -184,24 +189,18 @@
   </p>
   <!-- The Modal -->
   <div id="trunkModal" class="modal">
-
     <!-- Modal content -->
     <div class="modal-content">
       <div class="modal-header" id="modal-header">
         <span class="close">&times;</span>
       </div>
-      <div class="modal-body" id="modal-body">
-      </div>
-      <div class="modal-footer" id="modal-footer">
-      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
     </div> 
-
   </div>
-
-  <script src="../js/html_js/about_this.js"></script>
-
 </div>
 
+  <script src="../js/html_js/about_this.js"></script>
   <script src="../js/html_js/storage.js"></script>
   <script src="../js/html_js/modal.js"></script>
 

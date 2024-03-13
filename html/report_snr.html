@@ -153,7 +153,11 @@
     <div class="aside">
       <h2>Info: </h2>
       <p> Enter the required data! Click the [SNR Report] button or enter the measurement time in minutes and start [Time Limit / SNR Report] to display the diagram! </p>
-      <p><span>Number of measurement results: </span><span id="length"></span></p>
+      <div class="list">
+        <ul>
+          <li><span>Number of data: </span><span id="length"></span></li>
+        </ul>
+      </div>
       <div><h3>Other initial values:</h3>
         <p>(Save the data in a JSON file and you can view them in detail on the [View Report] page.)</p>
       </div>
@@ -173,30 +177,24 @@
 </div>
 
 <div class="footer">
-    <p>
-     Copyleft SNR Report with sr-525hd 2024 | 
-      <span class="about_this" id="modalBtn">About this</span>
-    </p>
-    <!-- The Modal -->
-    <div id="trunkModal" class="modal">
-
-      <!-- Modal content -->
-      <div class="modal-content">
-        <div class="modal-header" id="modal-header">
-          <span class="close">&times;</span>
-        </div>
-        <div class="modal-body" id="modal-body">
-        </div>
-        <div class="modal-footer" id="modal-footer">
-        </div>
-      </div> 
-
-    </div>
-
-    <script src="../js/html_js/about_this.js"></script>
-
+  <p>
+   Copyleft SNR Report with sr-525hd 2024 | 
+    <span class="about_this" id="modalBtn">About this</span>
+  </p>
+  <!-- The Modal -->
+  <div id="trunkModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header" id="modal-header">
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div> 
+  </div>
 </div>
 
+  <script src="../js/html_js/about_this.js"></script>
   <script src="../js/html_js/storage.js"></script>
   <script src="../js/html_js/modal.js"></script>
 

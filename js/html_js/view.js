@@ -34,10 +34,7 @@ function readJson() {
         
         viewAllData(alfa, beta, gamma, lockVal, lnb_current, fromdate, todate, timestamp);
 
-        var tables = document.querySelectorAll("#datalist");
-        for (let i = 0; i < tables.length; i++) {
-          $(tables[i]).DataTable();
-        }
+        initDataTables();
                 
         var measureLength = AllData.length;
         $("#length").html(measureLength);
@@ -100,6 +97,13 @@ function readJson() {
     $("#todate").html(todate);
   }
 
+  function initDataTables() {
+    var tables = document.querySelectorAll("#datalist");
+    for (let i = 0; i < tables.length; i++) {
+        $(tables[i]).DataTable();
+    }
+  }
+
 /** Get data */
 
   function getDataFromJson(allData, key){
@@ -122,7 +126,7 @@ $(function () {
       $("#success").hide('slow');
     });
 
-    $("#open").change(function () {
+    $("#fileinput").change(function () {
 
         var myFile = $('#fileinput').prop('files')[0];
         var fileName = (myFile)? myFile.name: null;
