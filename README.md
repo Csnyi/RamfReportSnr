@@ -18,6 +18,6 @@ Copyright (C) 2024 Csnyi
         GNU General Public License for more details.</br>
 
         You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <a href="https://www.gnu.org/licenses/" target="_blank"> https://www.gnu.org/licenses/ </a>.
+        along with this program.  If not, see <https://www.gnu.org/licenses/>.
     
 We welcome all observations and comments.
