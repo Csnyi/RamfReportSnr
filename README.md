@@ -5,7 +5,7 @@ This project was created so that anyone can freely monitor their device.
 The project was created with html, css, js codes, for a local internal network. Not suitable for use via a server. Do not make it available over the Internet because it does not contain adequate security solutions for this! If you do, be careful! 
 Take the proper precautions!
 
-Copyright (C) <2024>  <Csnyi> 
+Copyright (C) 2024 Csnyi 
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -18,6 +18,6 @@ Copyright (C) <2024>  <Csnyi>
         GNU General Public License for more details.</br>
 
         You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <https://www.gnu.org/licenses/>.
+        along with this program.  If not, see <a href="https://www.gnu.org/licenses/" target="_blank"> https://www.gnu.org/licenses/ </a>.
     
 We welcome all observations and comments.
