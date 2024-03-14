@@ -16,7 +16,7 @@ var modalBody = `
         If you do, be careful! Take the proper precautions!
     </p>
     <p>
-        Copyright (C) 2024 Csnyi 
+        Copyright (C) 2024 Csnyi </br>
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
