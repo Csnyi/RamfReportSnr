@@ -98,7 +98,7 @@ function readJson() {
   }
 
   function initDataTables() {
-    var tables = document.querySelectorAll("#datalist");
+    var tables = document.querySelectorAll(".datalist");
     for (let i = 0; i < tables.length; i++) {
         $(tables[i]).DataTable();
     }
@@ -109,7 +109,10 @@ function readJson() {
   function getDataFromJson(allData, key){
     var data = [];
     for (let x in allData){
-        data.push(allData[x][key]);
+      if (!isNaN(allData[x][key])) {
+        var oneData = Number(allData[x][key]);
+        data.push(oneData);
+      }
     }
     return data;
   }
@@ -129,21 +132,26 @@ $(function () {
     $("#fileinput").change(function () {
 
         var myFile = $('#fileinput').prop('files')[0];
-        var fileName = (myFile)? myFile.name: null;
-
-        if (fileName != null) { 
-            $("#fileName").html(fileName);
-            $("#fname").html(fileName);
-        }else{
-            $("#fname").html("No JSON selected!");
-        }
-        
-        readJson(); 
-
-        var text = `${fileName} processed!`;
-        var err = "Choose a file!";
-        var uzenet = new sendMessage("#success", text, fileName, err, 5000);
-        uzenet.send();
+        /* if (myFile) { */
+            var fileName = myFile.name;
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+            if (fileExtension === 'json') {
+                readJson(); 
+                $("#fileName").html(fileName);
+                $("#fname").html(fileName);
+                var text = `${fileName} processed!`;
+                var uzenet = new sendMessage("#success", text, true, null, 5000);
+                uzenet.send();
+            } else {
+                var err = "The selected file has an incorrect extension.";
+                var uzenet = new sendMessage("#success", null, false, err, 5000);
+                uzenet.send();
+            }
+        /* } else {
+            var err = "No JSON selected!";
+            var uzenet = new sendMessage("#success", null, false, err, 5000);
+            uzenet.send();
+        } */
 
     });
 

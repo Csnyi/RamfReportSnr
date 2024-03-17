@@ -1,8 +1,8 @@
 $(function(){
   // Get the modal
-  var modals = document.querySelectorAll("#trunkModal");
+  var modals = document.querySelectorAll(".modal");
   // Get the button that opens the modal
-  var btns = document.querySelectorAll("#modalBtn");
+  var btns = document.querySelectorAll(".modalBtn");
   
   // Get the <span> element that closes the modal
   var spans = document.querySelectorAll(".close");
