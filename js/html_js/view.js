@@ -147,8 +147,13 @@ $(function () {
 
     });
 
-    $("#test").click(function(){
-        
+    $("#load").click(function () {
+        window.close();
+        if (window.opener) {
+          window.opener.focus();
+        } else {
+          window.location.href = document.referrer;
+        }
     });
 
     drawChartFromStorage("myPlot1", "Signal-to-noise ratio");
