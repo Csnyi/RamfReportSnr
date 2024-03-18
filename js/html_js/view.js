@@ -6,7 +6,16 @@ function checkLock(text) {
   return regex.test(text);
 }
 
-var containsLock;
+function checkJSONForm(response) {
+  try {
+      JSON.parse(response); 
+      console.log('The file is valid JSON.');
+      return true; 
+  } catch (error) {
+      console.error('The file is not valid JSON:', error.message);
+      return false; 
+  }
+}
 
 function readJson() {
     const [file] = document.getElementById('fileinput').files;
@@ -14,19 +23,21 @@ function readJson() {
     if (file) {
         reader.readAsText(file);
     };
+    var fileName = file.name;
 
     reader.addEventListener("load", () => {
 
         var response = reader.result;
-        var AllData = JSON.parse(response);
-        
-        containsLock = checkLock(response);
-        if (!containsLock) {
-            var err = "The selected file has an incorrect JSON.";
+        var jsonValid = checkJSONForm(response);
+        var containsLock = checkLock(response);
+        if (!containsLock || !jsonValid) {
+            var err = "The selected "+ fileName +" file has an incorrect JSON.";
             var uzenet = new sendMessage("#success", null, false, err, 5000);
             uzenet.view();
             return;
         };
+
+        var AllData = JSON.parse(response);
 
         var alfa = getDataFromJson(AllData, "alfa", "°");
         var beta = getDataFromJson(AllData, "beta", "°");
@@ -65,7 +76,7 @@ function readJson() {
             name2: 'LM SNR',
             timestamp: timestamp
         };
-        drawChartFromStorage("myPlot1", "Signal-to-noise ratio", plotdata1)
+        drawChartFromStorage("myPlot1", "Signal-to-noise ratio", plotdata1);
 
         var plotdata2 = {
             yData1: lnb_voltage,
@@ -74,7 +85,15 @@ function readJson() {
             name2: 'PSU Voltage',
             timestamp: timestamp
         };
-        drawChartFromStorage("myPlot2", "Voltages", plotdata2)
+        drawChartFromStorage("myPlot2", "Voltages", plotdata2);
+
+        $("#fileName").html(fileName);
+        $("#fname").html(fileName);
+
+        var text = `${fileName} processed!`;
+        var uzenet = new sendMessage("#success", text, true, null, 5000);
+        uzenet.send();
+
     }, false); 
 };
 
@@ -149,11 +168,6 @@ $(function () {
             var fileExtension = fileName.split('.').pop().toLowerCase();
             if (fileExtension === 'json') {
                 readJson(); 
-                $("#fileName").html(fileName);
-                $("#fname").html(fileName);
-                var text = `${fileName} processed!`;
-                var uzenet = new sendMessage("#success", text, true, null, 5000);
-                uzenet.send();
             } else {
                 var err = "The selected file has an incorrect extension.";
                 var uzenet = new sendMessage("#success", null, false, err, 5000);
