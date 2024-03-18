@@ -1,5 +1,13 @@
 /** JSON read */
 
+// check JSON
+function checkLock(text) {
+  const regex = /lock/gi; 
+  return regex.test(text);
+}
+
+var containsLock;
+
 function readJson() {
     const [file] = document.getElementById('fileinput').files;
     const reader = new FileReader(); 
@@ -12,16 +20,24 @@ function readJson() {
         var response = reader.result;
         var AllData = JSON.parse(response);
         
-        var alfa = getDataFromJson(AllData, "alfa");
-        var beta = getDataFromJson(AllData, "beta");
-        var gamma = getDataFromJson(AllData, "gamma");
+        containsLock = checkLock(response);
+        if (!containsLock) {
+            var err = "The selected file has an incorrect JSON.";
+            var uzenet = new sendMessage("#success", null, false, err, 5000);
+            uzenet.view();
+            return;
+        };
+
+        var alfa = getDataFromJson(AllData, "alfa", "°");
+        var beta = getDataFromJson(AllData, "beta", "°");
+        var gamma = getDataFromJson(AllData, "gamma", "°");
         var lock = getDataFromJson(AllData, "lock");
         var lockVal = [];
         for (let i in lock){
             var lockText = (lock[i] == 0) ? "not locked" : "locked";
             lockVal.push(lockText);
         };
-        var lnb_current = getDataFromJson(AllData, "lnb_current");
+        var lnb_current = getDataFromJson(AllData, "lnb_current", " mA");
         var lnb_voltage = getDataFromJson(AllData, "lnb_voltage");
         var psu_voltage = getDataFromJson(AllData, "psu_voltage");
         var snr = getDataFromJson(AllData, "snr");
@@ -30,12 +46,15 @@ function readJson() {
         fromdate = new Date(timestamp[0]).toLocaleString();
         todate = new Date(timestamp[timestamp.length-1]).toLocaleString();
 
-        viewFirstData(alfa, beta, gamma, lock, lnb_current, fromdate, todate);
+        viewFirstData(alfa, beta, gamma, lockVal, lnb_current);
         
-        viewAllData(alfa, beta, gamma, lockVal, lnb_current, fromdate, todate, timestamp);
+        viewTimes(fromdate, todate);
 
-        initDataTables();
-                
+        const dataSets = [alfa, beta, gamma, lockVal, lnb_current];
+        const dataSet = dataSets.map(data => data.map((value, index) => [value, new Date(timestamp[index]).toLocaleString()]));
+
+        initDataTables(dataSet);
+      
         var measureLength = AllData.length;
         $("#length").html(measureLength);
 
@@ -61,57 +80,50 @@ function readJson() {
 
 /** load data */
 
-  function viewSelect(data, text, timestamp){
-    var dataHtml = "";
-    for (let x =0; x<data.length;  x++){
-        var dataVal = data[x] + text ;
-        var atTime = new Date(timestamp[x]).toLocaleString();
-        dataHtml += "<tr><td>"+dataVal+"</td><td>"+atTime+"</td></tr>";
-    };
-    return dataHtml;
-  };
-
-  function viewFirstData(alfa, beta, gamma, lock, lnb_current, fromdate, todate) {
-    $("#alfa_first").html(alfa[0]+ "°");
-    $("#beta_first").html(beta[0]+ "°");
-    $("#gamma_first").html(gamma[0]+ "°");
-    var lockVal = (lock[0] == 0) ? "not locked" : "locked" ;
-    $("#lock_first").html(lockVal);
-    $("#lnb_current_first").html(lnb_current[0] + " mA");
-    $("#fromdate_first").html(fromdate);
-    $("#todate_first").html(todate);
+  function viewFirstData(alfa, beta, gamma, lockVal, lnb_current) {
+    $("#alfa_first").html(alfa[0]);
+    $("#beta_first").html(beta[0]);
+    $("#gamma_first").html(gamma[0]);
+    $("#lock_first").html(lockVal[0]);
+    $("#lnb_current_first").html(lnb_current[0]);
   }
 
-  function viewAllData(alfa, beta, gamma, lock, lnb_current, fromdate, todate, timestamp) {
-    var alfaHtml = viewSelect(alfa, "°", timestamp);
-    $("#alfa").html(alfaHtml);
-    var betaHtml = viewSelect(beta, "°", timestamp);
-    $("#beta").html(betaHtml);
-    var gammaHtml = viewSelect(gamma, "°", timestamp);
-    $("#gamma").html(gammaHtml);
-    var lockHtml = viewSelect(lock, "", timestamp);
-    $("#lock").html(lockHtml);
-    var lnb_currentHtml = viewSelect(lnb_current, " mA", timestamp);
-    $("#lnb_current").html(lnb_currentHtml);
+  function viewTimes(fromdate, todate) {
     $("#fromdate").html(fromdate);
     $("#todate").html(todate);
   }
 
-  function initDataTables() {
+  var infoTables = [];
+
+  function initDataTables(dataSet) {
     var tables = document.querySelectorAll(".datalist");
+    for (let i = 0; i < infoTables.length; i++)  {
+        if (infoTables[i]) {
+          infoTables[i].destroy();
+        } 
+    }
     for (let i = 0; i < tables.length; i++) {
-        $(tables[i]).DataTable();
+        var infoTable = $(tables[i]).DataTable({
+            destroy: true,
+            columns: [
+                { title: 'Value:' },
+                { title: 'Time:' }
+            ],
+            data: dataSet[i],
+            retrieve: true
+        });
+        infoTables.push(infoTable);
     }
   }
 
 /** Get data */
 
-  function getDataFromJson(allData, key){
+  function getDataFromJson(allData, key, sign=null){
     var data = [];
     for (let x in allData){
       if (!isNaN(allData[x][key])) {
         var oneData = Number(allData[x][key]);
-        data.push(oneData);
+        data.push(oneData+sign);
       }
     }
     return data;
@@ -132,7 +144,7 @@ $(function () {
     $("#fileinput").change(function () {
 
         var myFile = $('#fileinput').prop('files')[0];
-        /* if (myFile) { */
+        if (myFile) {
             var fileName = myFile.name;
             var fileExtension = fileName.split('.').pop().toLowerCase();
             if (fileExtension === 'json') {
@@ -147,11 +159,11 @@ $(function () {
                 var uzenet = new sendMessage("#success", null, false, err, 5000);
                 uzenet.send();
             }
-        /* } else {
+        } else {
             var err = "No JSON selected!";
             var uzenet = new sendMessage("#success", null, false, err, 5000);
             uzenet.send();
-        } */
+        }
 
     });
 
