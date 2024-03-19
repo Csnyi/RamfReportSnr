@@ -6,6 +6,24 @@ function checkLock(text) {
   return regex.test(text);
 }
 
+function validateJsonKey(jsonObj) {
+  const requiredKeys = ["lock", "snr", "lm_snr", "alfa", "beta", "gamma", "lnb_current", "lnb_voltage", "psu_voltage", "timestamp"];
+
+  for (let key of requiredKeys) {
+      if (!(key in jsonObj)) {
+          console.error("Missing required JSON key!");
+          return false; 
+      }
+      if (typeof jsonObj[key] !== 'number') {
+          if (requiredKeys.includes(key)) {
+              console.error("Required JSON key of non-number type");
+              return false;
+          }
+      }
+  }
+  return true; // Minden szükséges tag megtalálható és szám típusú
+}
+
 function checkJSONForm(response) {
   try {
       JSON.parse(response); 
@@ -36,8 +54,14 @@ function readJson() {
             uzenet.view();
             return;
         };
-
         var AllData = JSON.parse(response);
+        var validJsonKeys = validateJsonKey(AllData[0]);
+        if (!validJsonKeys) {
+            var err = "The selected "+ fileName +" file has an incorrect JSON for this.";
+            var uzenet = new sendMessage("#success", null, false, err, 5000);
+            uzenet.view();
+            return;
+        };
 
         var alfa = getDataFromJson(AllData, "alfa", "°");
         var beta = getDataFromJson(AllData, "beta", "°");

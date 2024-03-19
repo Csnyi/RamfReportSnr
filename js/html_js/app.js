@@ -44,15 +44,17 @@
           data: params,
           dataType: 'text',
           success: function(response) {
+            console.log(response)
               // In the event of a successful response
               $("#status").html(" under process!");
               startEvents();
           },
           error: function(xhr, status, error) {
               // Hiba kezelése
+              console.log(xhr);
               var uzenet = new sendMessage(
                   '#alert', 
-                  'An error occurred while sending data: ' + status + error,
+                  'An error occurred while sending data: ' + status + error ,
                   true, null, 5000
               );
               uzenet.view();
@@ -63,13 +65,6 @@
       uzenet.view();
     }
   } 
-
-  function isValidIP(ip) {
-    // Regex pattern
-    var ipPattern = /^(25[0-5]|2[0-4]\d|[01]?\d{1,2})(\.(25[0-5]|2[0-4]\d|[01]?\d{1,2})){3}$/;
-    // We check the IP address using the pattern
-    return ipPattern.test(ip);
-  }
 
 /** startEvents Ajax GET request. 
  * For example: // url: http://192.168.1.56/public?command=startEvents
@@ -100,12 +95,12 @@
 
           // timestamp
           var timestamp = new Date().getTime();
-          var i = 0;
 
           // Breakdown into lines - every 16th line (result per second approx. 333/16)
           var lines = response.trim().split('\n');
 
           // Creating objects
+          var i = 0;
           var eventData = lines
             .filter((line, index) => (index + 1) % 16 === 0 && line.includes('data:'))
             .map(line => {
@@ -392,6 +387,13 @@ function getAllStorageData() {
 }
 
 // get Form elements
+
+function isValidIP(ip) {
+  // Regex pattern
+  var ipPattern = /^(25[0-5]|2[0-4]\d|[01]?\d{1,2})(\.(25[0-5]|2[0-4]\d|[01]?\d{1,2})){3}$/;
+  // We check the IP address using the pattern
+  return ipPattern.test(ip);
+}
 
 function getFormValue(key){
   if (key == 'ip') {

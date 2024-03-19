@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "R.A.M.F. SNR Report",
-  "version": "3.9.3",
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "version": "3.19.1",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'self'",
   "description": "A Chrome Extension for R.A.M.F. SNR Report",
   "background": {
     "scripts": [
