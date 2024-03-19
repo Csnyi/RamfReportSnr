@@ -31,7 +31,7 @@ function readJson() {
         var jsonValid = checkJSONForm(response);
         var containsLock = checkLock(response);
         if (!containsLock || !jsonValid) {
-            var err = "The selected "+ fileName +" file has an incorrect JSON.";
+            var err = "The selected "+ fileName +" file has an incorrect JSON for this.";
             var uzenet = new sendMessage("#success", null, false, err, 5000);
             uzenet.view();
             return;
