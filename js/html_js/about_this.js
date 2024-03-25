@@ -31,10 +31,10 @@ var modalBody = `
         along with this program.  If not, see <a href="https://www.gnu.org/licenses/" target="_blank"> https://www.gnu.org/licenses/ </a>.
     </p>
     <p>
-        We welcome all observations and comments: (GitHub link).
+        We welcome all observations and comments: (https://github.com/Csnyi/RamfReportSnr).
     </p>
     <p>
-        The project is available: (GitHub link).
+        The project is available: (https://github.com/Csnyi/RamfReportSnr).
     </p>
 `;
 
