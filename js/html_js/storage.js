@@ -3,12 +3,12 @@
     /* Metthod for add storage  */
     let addDataLs = (element, lsname) => {
         if(element != ''){
-            setData(element, lsname); // handler for adding item into local storage
+            setDataLs(element, lsname); // handler for adding item into local storage
         }
     }
  
      /* handler for get storage  */
-    let getData = (lsname, item = null) => {
+    let getDataLs = (lsname, item = null) => {
         /*
         * localStorage.getItem(<itemname>) main method 
         * (predefined method of js) for getting item from localstorage
@@ -29,8 +29,8 @@
     }
 
      /* handler for set data/item storage  */
-    let setData = (item, lsname) => {
-        let data = getData(lsname); // call getdata handler for getting  data from list 
+    let setDataLs = (item, lsname) => {
+        let data = getDataLs(lsname); // call getdata handler for getting  data from list 
         data = (data != false) ? data : [];
         data.push(item);
         data = JSON.stringify(data);
@@ -40,6 +40,18 @@
         */
         localStorage.setItem(lsname, data);
         
+    }
+
+    /* handler for remove item from localstorage */
+    let removeDataLs = (lsname, itemId) => {
+        let data = getDataLs();
+        if(data){
+            let newData = data.filter((v,i) => { return i != itemId });
+            newData = JSON.stringify(newData);
+            localStorage.setItem(lsname,newData);
+        }else{
+            return false;
+        }
     }
 
 /** indexedDB */

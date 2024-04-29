@@ -1,170 +1,269 @@
+/** list of keys stored in localstorage */
+  const localStorageKeys = {
+    IP: 'ip',
+    FREQ: 'freq',
+    FREQ_LO: 'freq_lo',
+    SR: 'sr',
+    POL: 'pol',
+    TONE: 'tone',
+    DSQ: 'dsq',
+    SLNBE: 'slnbe',
+    SET_TIME: 'setTime',
+    STOP: 'stop',
+    RUN: 'run',
+    ERROR: 'error'
+  };
 
-/** initSmartSNR Ajax GET request. 
- * For example: //url: http://192.168.1.56/public?command=initSmartSNR&state=on&mode=snr&freq=1231&sr=63000&pol=1&tone=0
-*/
+  localStorage.setItem(localStorageKeys.RUN, 0);
+  localStorage.setItem(localStorageKeys.STOP, 0);
+  localStorage.setItem(localStorageKeys.SET_TIME, 0);
 
-  function initSmartSNR() {
-
-    var countsDown = $("#countsDown").text();
-    var uzenet = new sendMessage(
-        '#success', 
-        'Data is coming in all the time!',
-        true, null, 15000
-    );
-
-    if (!countsDown || countsDown == 'Kész!') {
-
-      $("#countsDown").html("");
-      $("#status").html("");
-
-      var ip = localStorage.getItem("ip");
-      var freq = Number(localStorage.getItem("freq"));
-      var freq_lo = Number(localStorage.getItem("freq_lo"));
-      var freq_if = (freq - freq_lo);
-      var sr = localStorage.getItem("sr");
-      var pol = Number(localStorage.getItem("pol"));
-      var tone = Number(localStorage.getItem("tone"));
-      var dsq = localStorage.getItem("dsq");
-      var slnbe = Number(localStorage.getItem("slnbe"));
-      var url = 'http://'+ip+'/public';
-      var params = {
-          command: 'initSmartSNR',
-          state: 'on',
-          mode: 'snr',
-          freq: freq_if,
-          sr: sr,
-          pol: pol,
-          tone: tone,
-          diseqc_hex: dsq,
-          smart_lnb_enabled: slnbe
-      };
-      $.ajax({
-          url: url,
-          method: 'GET',
-          data: params,
-          dataType: 'text',
-          success: function(response) {
-            console.log(response)
-              // In the event of a successful response
-              $("#status").html(" under process!");
-              startEvents();
-          },
-          error: function(xhr, status, error) {
-              // Hiba kezelése
-              console.log(xhr);
-              var uzenet = new sendMessage(
-                  '#alert', 
-                  'An error occurred while sending data: ' + status + error ,
-                  true, null, 5000
-              );
-              uzenet.view();
-          }
-      });
-      
-    }else{
-      uzenet.view();
-    }
-  } 
-
-/** startEvents Ajax GET request. 
- * For example: // url: http://192.168.1.56/public?command=startEvents
-*/
-
-  function startEvents() {
-      moveBar();
-      var c = 0;
-      function myCounter() {
-        $("#countsDown").html(++c + " sec");
-      }
-      myTimer = setInterval(myCounter, 1000);
-      var ip = localStorage.getItem("ip");
-      var url = "http://"+ip+"/public";
-      var params = {
-            command: 'startEvents'
-      };
-      $.ajax({
-        url: url,
-        method: 'GET',
-        data: params,
-        dataType: 'text',
-        success: function (response) {
-          // In the event of a successful response
-
-          // stop counter
-          clearInterval(myTimer);
-
-          // timestamp
-          var timestamp = new Date().getTime();
-
-          // Breakdown into lines - every 16th line (result per second approx. 333/16)
-          var lines = response.trim().split('\n');
-
-          // Creating objects
-          var i = 0;
-          var eventData = lines
-            .filter((line, index) => (index + 1) % 16 === 0 && line.includes('data:'))
-            .map(line => {
-              try {
-                var data = JSON.parse(line.substring(line.indexOf('{')));
-                data.timestamp = timestamp+i;
-                i += 1000;
-                return data;
-              } catch (e) {
-                $("#alert").html('Error processing data: ' + e);
-                return null;
-              }
-            })
-            .filter(item => item !== null); 
-          
-          /*// Split into rows - each row
-          var lines = response.trim().split('\n');
-
-          // Creating objects
-          var eventData = lines
-            .filter(line => line.includes('data:'))
-            .map(line => {
-              try {
-                var data = JSON.parse(line.substring(line.indexOf('{')));
-                var timestamp = new Date().getTime(); 
-                data.timestamp = timestamp;
-                return data;
-              } catch (e) {
-                $("#alert").html('Error processing data: ' + e);
-                return null;
-              }
-            })
-            .filter(item => item !== null);*/
-
-          // Ell.:
-          // console.log(eventData);
-
-          // Data handling
-          addDataIndexedDB(eventData);
-
-          // Show graph
-          drawChart();
-
-          writeData();
-
-          // Manage messages
-          $("#countsDown").html("Kész!");
-          $("#status").html("OFF");
-        },
-        error: function (xhr, status, error) {
-          // Error handling
-          var uzenet = new sendMessage(
+/** initSmartSNR GET request. 
+ * For example: //url: http://192.168.1.4/public?command=initSmartSNR&state=on&mode=snr&freq=1231&sr=63000&pol=1&tone=0
+ */
+  async function initSmartSNR() {
+    try {
+        var ip = localStorage.getItem(localStorageKeys.IP);
+        var freq = Number(localStorage.getItem(localStorageKeys.FREQ));
+        var freq_lo = Number(localStorage.getItem(localStorageKeys.FREQ_LO));
+        var freq_if = (freq - freq_lo);
+        var sr = localStorage.getItem(localStorageKeys.SR);
+        var pol = Number(localStorage.getItem(localStorageKeys.POL));
+        var tone = Number(localStorage.getItem(localStorageKeys.TONE));
+        var dsq = localStorage.getItem(localStorageKeys.DSQ);
+        var slnbe = Number(localStorage.getItem(localStorageKeys.SLNBE));
+        var url = new URL('http://' + ip + '/public');
+        var params = {
+            command: 'initSmartSNR',
+            state: 'on',
+            mode: 'snr',
+            freq: freq_if,
+            sr: sr,
+            pol: pol,
+            tone: tone,
+            diseqc_hex: dsq,
+            smart_lnb_enabled: slnbe
+        };
+        url.search = new URLSearchParams(params).toString();
+        const response = await fetch(url);
+        $("#status").html(" under process!");
+    } catch (error) {
+        console.error('Error: ' + error);
+        var infoDisplay = new sendMessage(
             '#alert',
-            'An error occurred while sending data: ' + status + "; " + error,
-            true, null, 5000
-          );
-          uzenet.view();
-          clearInterval(myTimer);
-        }
-      });
+            'An error occurred during initSmartSNR: ' + error,
+            true
+        );
+        infoDisplay.view();
+        errorMessageHandler();
+        localStorage.setItem(localStorageKeys.ERROR, 1);
+    }
   }
 
 
-/** Graph */
+/** startEvents GET request. 
+ * For example: // url: http://192.168.1.4/public?command=startEvents
+**********************************************************************************************************************/
+
+  async function startEvents() {
+    try {
+      var elem = document.getElementById("eventsBar");
+      var c = 0;
+      var width = 0;
+      var ip = localStorage.getItem(localStorageKeys.IP);
+      var url = new URL('http://' + ip + '/public');
+      var params = {
+        command: 'startEvents'
+      };
+      url.search = new URLSearchParams(params).toString();
+      const response = await fetch(url);
+      const reader = response.body.getReader();
+      var text = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          // progress bar clean
+          elem.style.width = "0%";
+          //console.log("Stream complete");
+          // set run 
+          localStorage.setItem(localStorageKeys.RUN, 0);
+          // data processing
+          streamResponseHandler(text);
+          // Show graph
+          drawChart();
+          // info data
+          writeDataInfo();
+          break;
+        }
+        // Event stream handling 
+        text += new TextDecoder().decode(value);
+        // response counter
+        $("#countsEvent").html(parseInt(c++/16));
+        // progress bar 
+        width += 100/332; 
+        elem.style.width = width + "%";
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Error handling
+      var infoDisplay = new sendMessage(
+        '#alert',
+        'An error occurred during startEvents: ' + error,
+        true
+      );
+      infoDisplay.view();
+      errorMessageHandler();
+      localStorage.setItem(localStorageKeys.ERROR, 1);
+    }
+  }
+
+  function streamResponseHandler(text) {
+    // In the event of a successful response
+    // timestamp
+    var timestamp = new Date().getTime();
+    // Breakdown into lines - every 16th line (result per second approx. 333/16)
+    var lines = text.trim().split('\n');
+    // Creating objects
+    var i = 0;
+    var eventData = lines
+      .filter((line, index) => index % 16 === 0 && line.includes('data:'))
+      .map(line => {
+        try {
+          var data = JSON.parse(line.substring(line.indexOf('{')));
+          data.timestamp = timestamp + i;
+          i += 1000;
+          return data;
+        } catch (e) {
+          $("#alert").html('Error processing data: ' + e);
+          return null;
+        }
+      })
+      .filter(item => item !== null);
+    // Data handling (storage.js)
+    addDataIndexedDB(eventData);
+  }
+
+  function errorMessageHandler() {
+    $("#status").html('');
+    $("#countsEvent").html('');
+    var elem = document.getElementById("eventsBar");
+    elem.style.width = "0%";
+    localStorage.setItem(localStorageKeys.RUN, 0);
+  }
+
+/** ordering of fetch queries */
+  async function reportSnr() {
+    try {
+      var infoDisplay = new sendMessage(
+        "#success",
+        "The request is being processed.",
+        true
+      );
+      infoDisplay.view();
+    
+      // Manage time interval report 
+      var setTime = localStorage.getItem(localStorageKeys.SET_TIME);
+      if (setTime>0) {
+        for (i=0; i<(3*setTime); i++) {
+            var stop = localStorage.getItem(localStorageKeys.STOP);
+            if (stop == 1) {
+                localStorage.setItem(localStorageKeys.STOP, 0);
+                break;
+            }
+            await initSmartSNR();
+            await startEvents();
+        }
+      }else{
+        await initSmartSNR();
+        await startEvents();
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Error handling
+      var infoDisplay = new sendMessage(
+        '#alert',
+        'An error occurred while reporting the data: ' + error,
+        true
+      );
+      infoDisplay.view();
+      errorMessageHandler();
+      localStorage.setItem(localStorageKeys.ERROR, 1);
+    } finally {
+      var error = localStorage.getItem(localStorageKeys.ERROR);
+      if (error==0) {
+        // Manage messages
+        var infoDisplay = new sendMessage(
+          "#success",
+          "The request has been completed.",
+          true, null, 5000
+        );
+        infoDisplay.send();
+        $("#countsEvent").html("Successful!");
+        $("#status").html("OFF");
+      } else {
+        localStorage.setItem(localStorageKeys.ERROR, 0);
+      }
+    }
+  }
+
+/** Time interval report / measurement for a given time, 3 reports per minute  *******************************************/
+
+  function timeIntervalReport() {
+    var setTime = $("#setTime").val();
+    localStorage.setItem(localStorageKeys.SET_TIME, setTime);
+    if (setTime>0) {
+      reportSnr();
+    }else{
+      var infoDisplay = new sendMessage(
+          "#alert",
+          "Set the value!",
+          true, null, 5000
+      );
+      infoDisplay.send();
+      localStorage.setItem(localStorageKeys.RUN, 0);
+    }
+  }
+
+/** Stop initSmartSNR request:  
+ * For example: //url: http://192.168.1.56/public?command=initSmartSNR&state=off
+***************************************************************************************************************************/
+
+  async function stopReport() {
+    try {
+      localStorage.setItem(localStorageKeys.STOP, 1);
+      /* $("#countsEvent").html("");
+      $("#status").html(""); */
+      var ip = localStorage.getItem(localStorageKeys.IP);
+      var url = new URL('http://' + ip + '/public');
+      var params = {
+        command: 'initSmartSNR',
+        state: 'off'
+      };
+      url.search = new URLSearchParams(params).toString();
+      const response = await fetch(url);
+      // Manage messages
+      $("#status").html("Stopped!");
+      var infoDisplay = new sendMessage(
+        '#success',
+        'Process stopped by user.',
+        true, null, 5000
+      );
+      infoDisplay.send();
+    } catch (error) {
+      console.error('Error: ' + error);
+      var infoDisplay = new sendMessage(
+        '#alert',
+        'An error occurred while stopped stream: ' + error,
+        true
+      );
+      infoDisplay.view();
+      errorMessageHandler();
+      localStorage.setItem(localStorageKeys.ERROR, 1);
+    }
+  }
+
+/** Graph **************************************************************************************************/
+
   // Data query from the data table based on key
   function getDataKey(response, key) {
     var yData = [];
@@ -175,6 +274,7 @@
     yData = (keyData) ? keyData: [];
     return yData;
   }
+
   // Date Formatting
   function formatDateLocal(element) {
     let dateLocal = [];
@@ -185,6 +285,7 @@
     return dateLocal;
   }
 
+  // draw graph
   function drawChart(){
 
     var ySnrValues = [];
@@ -226,9 +327,9 @@
     });
   }
 
-/** Other data */
+/** Other data ********************************************************************************************/
 
-  function writeData() {
+  function writeDataInfo() {
       
       getAllStorageData().then(allData => {
 
@@ -253,121 +354,23 @@
             $("#todate").html(todate);
             
             var measureLength = allData.length;
-            $("#length").html(measureLength);
-  
+            $("#length").html(measureLength);  
+        }else{
+            $("#alfa").html("");
+            $("#beta").html("");
+            $("#gamma").html("");
+            $("#lock").html("");
+            $("#lnb_current").html("");
+            $("#fromdate").html(""); 
+            $("#todate").html("");
+            $("#length").html("");
         }
       }).catch(error => {
         console.error(error);
       });
   }
 
-/** Time limit report */
-
-  localStorage.setItem("stop", 0);
-
-  function reportTimes() {
-    var setTime = $("#setTime").val();
-    if (setTime>0) {
-      var uzenet = new sendMessage(
-          "#success",
-          "Request started!",
-          true, null, 5000
-      );
-      uzenet.view();
-      var reportTimes = setInterval(function() {
-          var stop = localStorage.getItem("stop");
-          if (stop == 0) {
-              initSmartSNR();
-          } else {
-              var uzenet = new sendMessage(
-                  "#success",
-                  "The \"Time Limit\" request is stopped!",
-                  true, null, 5000
-              );
-              uzenet.send();
-              clearInterval(reportTimes);
-          }
-      }, 2000);
-      setTimeout(function() {
-          var stop = localStorage.getItem("stop");
-          if (stop == 0) { 
-              clearInterval(reportTimes);
-              var uzenet = new sendMessage(
-                  "#success",
-                  "It will be ready soon.",
-                  true, null, 5000
-              );
-              uzenet.send();
-          }
-      }, setTime * 60 * 1000);
-    }else{
-      var uzenet = new sendMessage(
-          "#alert",
-          "Set the time!",
-          true, null, 5000
-      );
-      uzenet.send();
-    }
-  }
-
-/** Stop initSmartSNR request:  
- * For example: //url: http://192.168.1.56/public?command=initSmartSNR&state=off
-*/
-
-  function stopReport() {
-    localStorage.setItem("stop", 1);
-    $("#countsDown").html("");
-    $("#status").html("");
-    var ip = localStorage.getItem("ip");
-    var url = 'http://' + ip + '/public';
-    var params = {
-      command: 'initSmartSNR',
-      state: 'off'
-    };
-    $.ajax({
-      url: url,
-      method: 'GET',
-      data: params,
-      dataType: 'html',
-      success: function (response) {
-        // In the event of a successful response
-        $("#status").html("Stopped!");
-      },
-      error: function (xhr, status, error) {
-        // Error handling
-        var uzenet = new sendMessage(
-            '#alert',
-            'An error occurred while sending data: ' + status + error ,
-            true, null, 5000
-        );
-        uzenet.view();
-      }
-    });
-  }
-
-/** progress bar  */
-
-  var i = 0;
-  function moveBar() {
-    if (i == 0) {
-      i = 1;
-      var elem = document.getElementById("myBar");
-      var width = 0;
-      var id = setInterval(frame, 1000);
-      function frame() {
-        if (width >= 100) {
-          clearInterval(id);
-          i = 0;
-          elem.style.width = "0%";
-        } else {
-          width += 5;
-          elem.style.width = width + "%";
-        }
-      }
-    }
-  }
-
-/** Get IDB all data */
+/** Get IDB all data *****************************************************************************************/
 
 function getAllStorageData() {
   return new Promise((resolve, reject) => {
@@ -413,7 +416,7 @@ function getFormValue(key){
   $("#"+key).val(p);
 }
 
-/** After the page loads */
+/** After the page loads **************************************************************************************/
 
 $(function(){
 
@@ -440,32 +443,71 @@ $(function(){
 
 // Button management
 
-  // Time Limit / SNR Report
-  $("#report").click(function(){
-    localStorage.setItem("stop", 0);
-    reportTimes();
+  // Time Interval / SNR Report
+  $("#timeIntervalReport").click(function(){
+    var run = localStorage.getItem(localStorageKeys.RUN);
+    if (run==0) {
+      var infoDisplay = new sendMessage(
+        "#success",
+        "The request has started!",
+        true
+      );
+      infoDisplay.view();
+      localStorage.setItem(localStorageKeys.RUN, 1);
+      localStorage.setItem(localStorageKeys.STOP, 0);
+      timeIntervalReport();
+    }else{
+      var infoDisplay = new sendMessage(
+        "#success",
+        "It's running! Try again later!",
+        true,null,5000
+      );
+      infoDisplay.send();
+    }
   });
   
   // SNR Report
-  $("#snrReport").click(function(){
-    initSmartSNR();
-    var uzenet = new sendMessage(
+  $("#reportOnce").click(function(){
+    var run = localStorage.getItem(localStorageKeys.RUN);
+    if (run==0) {
+      var infoDisplay = new sendMessage(
         "#success",
-        "The request has been started.",
+        "The request has started!",
+        true
+      );
+      infoDisplay.view();
+      localStorage.setItem(localStorageKeys.RUN,1);
+      localStorage.setItem(localStorageKeys.SET_TIME, 0);
+      reportSnr();
+    }else{
+      var infoDisplay = new sendMessage(
+        "#success",
+        "It's running! Try again later!",
         true,null,5000
-    );
-    uzenet.send();
+      );
+      infoDisplay.send();
+    }
   });
 
   // Stop SNR Report
   $("#stop").click(function(){
-    stopReport();
-    var uzenet = new sendMessage(
-        "#success",
-        "The request has been stopped.",
-        true,null,5000
-    );
-    uzenet.send();
+    var run = localStorage.getItem(localStorageKeys.RUN);
+    if (run==1) {
+        stopReport();
+        var infoDisplay = new sendMessage(
+            "#success",
+            "The request has been stopped.",
+            true,null,5000
+        );
+        infoDisplay.send();
+    }else{
+        var infoDisplay = new sendMessage(
+            "#success",
+            "No request.",
+            true,null,5000
+        );
+        infoDisplay.send();
+    }
   });
 
   // Delete all data from indexedDB 
@@ -473,23 +515,23 @@ $(function(){
     if (!confirm("Are you sure you want to delete the data?", "")) return;
     // clearIDB function call
     clearIDB().then(message => {
-        var uzenet = new sendMessage(
+        var infoDisplay = new sendMessage(
             "#success",
             message,
             true, null, 5000
         );
-        uzenet.send(); // The content of the data storage has been successfully deleted
+        infoDisplay.send(); // The content of the data storage has been successfully deleted
       }).catch(error => {
-        var uzenet = new sendMessage(
+        var infoDisplay = new sendMessage(
             "#alert",
             error,
             true, null, 5000
         );
-        uzenet.send();
+        infoDisplay.send();
         console.error(error);
       });
     drawChart();
-    writeData();
+    writeDataInfo();
   });
 
   // Save as JSON / Export as XlLSX - Generating buttons
@@ -536,6 +578,6 @@ $(function(){
 
   drawChart();
 
-  writeData();
+  writeDataInfo();
 
 });

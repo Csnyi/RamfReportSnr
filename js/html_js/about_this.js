@@ -28,13 +28,13 @@ var modalBody = `
         GNU General Public License for more details.</br>
 
         You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <a href="https://www.gnu.org/licenses/" target="_blank"> https://www.gnu.org/licenses/ </a>.
+        along with this program.  If not, see <a href="https://www.gnu.org/licenses/" target="_blank"> here</a>.
     </p>
     <p>
-        We welcome all observations and comments: (https://github.com/Csnyi/RamfReportSnr).
+        We welcome all observations and comments.
     </p>
     <p>
-        The project is available: (https://github.com/Csnyi/RamfReportSnr).
+        The project is available: <a href="https://github.com/Csnyi/RamfReportSnr" target="_blank">GitHub</a>.
     </p>
 `;
 

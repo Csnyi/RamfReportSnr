@@ -12,6 +12,7 @@
     <script src="../js/xlsx.full.min.js"></script>
     <script src="../js/html_js/info.js"></script>
     <script src="../js/html_js/drawchart.js"></script>
+    <script src="../js/html_js/storage.js"></script>
     <script src="../js/html_js/app.js"></script>
 </head>
 <body>
@@ -107,15 +108,15 @@
           </select>
         </li>
         <li>
-          <label for="setTime">Measurement time (min):</label>
+          <label for="setTime">Multiple value (1 value is about 1 min):</label>
           <input type="number" name="setTime" id="setTime" size="6"/>
         </li>
       </ul>
     </div>
     <div class="menu">
       <ul>
-        <a href="#top"><li id="report">Time Limit / SNR Report</li></a>
-        <a href="#top"><li id="snrReport">SNR Report</li></a>
+        <a href="#top"><li id="timeIntervalReport">Multiple Report</li></a>
+        <a href="#top"><li id="reportOnce">One Report</li></a>
         <a href="#top"><li id="stop">Stop Report</li></a>
         <a href="#top"><li class="del" id="clearls">Delete data</li></a>
         <li id="save">Save</li>
@@ -128,18 +129,20 @@
 
   <div class="col-8 col-s-9">
     <div id="top"></div>
-    <div class="alert" id="alert"></div>
     <div class="success" id="success"></div>
+    <div class="alert" id="alert"></div>
     <h1>Result</h1>
-    <div>
-      <p>The status of the request: <span id="status"></span></p>
-    </div>
-    <div class="content">
-      <label for="response">Response:</label>
-      <span id="countsDown"></span><br><br>
-      <div id="myProgress">
-        <div id="myBar"></div>
-      </div>
+    <div id="statusInfo">
+        <div>
+          <p>The status of the request: <span id="status"></span></p>
+        </div>
+        <div class="content">
+          <label for="response">Response:</label>
+          <span id="countsEvent"></span><br><br>
+          <div id="streamProgress">
+            <div id="eventsBar"></div>
+          </div>
+        </div>
     </div>
     <!-- <textarea id="response" rows="5" cols="40"></textarea> -->
     <div id="myPlot1" style="width:100%;max-width:1200px"></div>
@@ -197,7 +200,6 @@
 </div>
 
   <script src="../js/html_js/about_this.js"></script>
-  <script src="../js/html_js/storage.js"></script>
   <script src="../js/html_js/modal.js"></script>
 
 </body>

@@ -92,6 +92,12 @@
         background-color: #5f9ea0;
       }
 
+      .alert::after, .success::after {
+        float: right;
+        cursor: pointer;
+        content: "X";
+      }
+
       .content{
         margin: 15px;
       }
@@ -122,12 +128,12 @@
       }
 
       /* progress bar */
-      #myProgress {
+      #streamProgress {
         width: 100%;
         background-color: rgb(180, 180, 180);
       }
       
-      #myBar {
+      #eventsBar {
         width: 0%;
         height: 10px;
         background-color: #2f7f32 ;

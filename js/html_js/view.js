@@ -69,7 +69,7 @@ function readJson() {
         var lock = getDataFromJson(AllData, "lock");
         var lockVal = [];
         for (let i in lock){
-            var lockText = (lock[i] == 0) ? "not locked" : "locked";
+            var lockText = (lock[i] == 1) ? "locked" : "not locked";
             lockVal.push(lockText);
         };
         var lnb_current = getDataFromJson(AllData, "lnb_current", " mA");
@@ -167,6 +167,9 @@ function readJson() {
       if (!isNaN(allData[x][key])) {
         var oneData = Number(allData[x][key]);
         data.push(oneData+sign);
+      }else{
+        var oneData = "stopped";
+        data.push(oneData);
       }
     }
     return data;
