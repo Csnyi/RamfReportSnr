@@ -21,44 +21,44 @@
 /** initSmartSNR GET request. 
  * For example: //url: http://192.168.1.4/public?command=initSmartSNR&state=on&mode=snr&freq=1231&sr=63000&pol=1&tone=0
  */
-  async function initSmartSNR() {
-    try {
-        var ip = localStorage.getItem(localStorageKeys.IP);
-        var freq = Number(localStorage.getItem(localStorageKeys.FREQ));
-        var freq_lo = Number(localStorage.getItem(localStorageKeys.FREQ_LO));
-        var freq_if = (freq - freq_lo);
-        var sr = localStorage.getItem(localStorageKeys.SR);
-        var pol = Number(localStorage.getItem(localStorageKeys.POL));
-        var tone = Number(localStorage.getItem(localStorageKeys.TONE));
-        var dsq = localStorage.getItem(localStorageKeys.DSQ);
-        var slnbe = Number(localStorage.getItem(localStorageKeys.SLNBE));
-        var url = new URL('http://' + ip + '/public');
-        var params = {
-            command: 'initSmartSNR',
-            state: 'on',
-            mode: 'snr',
-            freq: freq_if,
-            sr: sr,
-            pol: pol,
-            tone: tone,
-            diseqc_hex: dsq,
-            smart_lnb_enabled: slnbe
-        };
-        url.search = new URLSearchParams(params).toString();
-        const response = await fetch(url);
-        $("#status").html(" under process!");
-    } catch (error) {
-        console.error('Error: ' + error);
-        var infoDisplay = new sendMessage(
-            '#alert',
-            'An error occurred during initSmartSNR: ' + error,
-            true
-        );
-        infoDisplay.view();
-        errorMessageHandler();
-        localStorage.setItem(localStorageKeys.ERROR, 1);
-    }
+async function initSmartSNR() {
+  try {
+      var ip = localStorage.getItem(localStorageKeys.IP);
+      var freq = Number(localStorage.getItem(localStorageKeys.FREQ));
+      var freq_lo = Number(localStorage.getItem(localStorageKeys.FREQ_LO));
+      var freq_if = (freq - freq_lo);
+      var sr = localStorage.getItem(localStorageKeys.SR);
+      var pol = Number(localStorage.getItem(localStorageKeys.POL));
+      var tone = Number(localStorage.getItem(localStorageKeys.TONE));
+      var dsq = localStorage.getItem(localStorageKeys.DSQ);
+      var slnbe = Number(localStorage.getItem(localStorageKeys.SLNBE));
+      var url = new URL('http://' + ip + '/public');
+      var params = {
+          command: 'initSmartSNR',
+          state: 'on',
+          mode: 'snr',
+          freq: freq_if,
+          sr: sr,
+          pol: pol,
+          tone: tone,
+          diseqc_hex: dsq,
+          smart_lnb_enabled: slnbe
+      };
+      url.search = new URLSearchParams(params).toString();
+      const response = await fetch(url);
+      $("#status").html(" under process!");
+  } catch (error) {
+      console.error('Error: ' + error);
+      var infoDisplay = new sendMessage(
+          '#alert',
+          'An error occurred during initSmartSNR: ' + error,
+          true
+      );
+      infoDisplay.view();
+      errorMessageHandler();
+      localStorage.setItem(localStorageKeys.ERROR, 1);
   }
+}
 
 
 /** startEvents GET request. 
@@ -149,6 +149,7 @@
     var elem = document.getElementById("eventsBar");
     elem.style.width = "0%";
     localStorage.setItem(localStorageKeys.RUN, 0);
+    localStorage.setItem(localStorageKeys.STOP, 1);
   }
 
 /** ordering of fetch queries */
@@ -445,6 +446,8 @@ $(function(){
 
   // Time Interval / SNR Report
   $("#timeIntervalReport").click(function(){
+    $("#alert").hide();
+    $("#success").hide();
     var run = localStorage.getItem(localStorageKeys.RUN);
     if (run==0) {
       var infoDisplay = new sendMessage(
@@ -468,6 +471,8 @@ $(function(){
   
   // SNR Report
   $("#reportOnce").click(function(){
+    $("#alert").hide();
+    $("#success").hide();
     var run = localStorage.getItem(localStorageKeys.RUN);
     if (run==0) {
       var infoDisplay = new sendMessage(
@@ -503,7 +508,7 @@ $(function(){
     }else{
         var infoDisplay = new sendMessage(
             "#success",
-            "No request.",
+            "There is no running report.",
             true,null,5000
         );
         infoDisplay.send();
