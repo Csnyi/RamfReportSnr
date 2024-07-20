@@ -31,7 +31,7 @@ var modalBody = `
         along with this program.  If not, see <a href="https://www.gnu.org/licenses/" target="_blank"> here</a>.
     </p>
     <p>
-        We welcome all observations and comments. <a href="https://csnyi.github.io/RamfReportSnr/" target="_blank"> Documentation </a>
+        We welcome all observations and comments.
     </p>
     <p>
         The project is available: <a href="https://github.com/Csnyi/RamfReportSnr" target="_blank">GitHub</a>.
@@ -49,6 +49,46 @@ var modalFooter = `
     </p>
 `;
 
+var modalHelp = `
+    <table class="helpinfo" style="width:100%">
+        <tr>
+            <th>
+                Measurement
+            </th>
+        </tr>
+        <tr>
+            <td>
+                If you do not enter a time (in minutes), 
+                it will measure until you stop it with Stop.
+                It stops automatically when the time is set.
+                After measurement, export the data to json so that you can look back at the results in the API.
+                If you also want to export to Excel, you can do so directly after the measurement.
+                The reason for this is that the data is stored in memory to the display of the graph 
+                and the data is lost when updating or closing the window.
+            </td>
+        </tr>
+        <tr>
+            <th> 
+                View
+            </th> 
+        </tr>
+        <tr> 
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <th>
+                Setup
+            </th>
+        </tr>
+        <tr>
+            <td>
+            </td>
+        </tr>
+    </table>
+`;
+
 $("#modal-header").append(modalHeader);
 $("#modal-body").append(modalBody);
 $("#modal-footer").append(modalFooter);
+$("#modal-help").append(modalHelp);
