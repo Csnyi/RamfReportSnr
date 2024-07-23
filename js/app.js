@@ -93,6 +93,10 @@ function start() {
     }
   };
   
+  if (eventSource.readyState == 0) {
+    logError(`Connecting...`);
+  }
+
   eventSource.addEventListener('update', function(e) { 
     let response = JSON.parse(e.data);
     if(response.ret_code == undefined){
@@ -123,13 +127,30 @@ function start() {
 
 // when "Stop" button pressed
 function stop() { 
-  eventSource.close();
-  clearInterval(eventSourceInterval);
-  $("#fps").html("");
-  logError(`Request stopped!<br><br>
-    Start: ${new Date(streamedData.timestamp[0]).toLocaleString()} <br>
-    Stop: ${new Date(streamedData.timestamp[streamedData.timestamp.length-1]).toLocaleString()} <br>
-  `);
+  if (eventSource == undefined) {
+     logError(`<p class="warn">Not runing!</p>`);
+  }
+
+  if (eventSource.readyState == 2) {
+    if (streamedData.timestamp.length > 0) {  
+      logError(`Request stopped!<br><br>
+        Start: ${new Date(streamedData.timestamp[0]).toLocaleString()} <br>
+        Stop: ${new Date(streamedData.timestamp[streamedData.timestamp.length-1]).toLocaleString()} <br>
+      `);
+    }else{
+      logError(`<p class="warn">Not runing!</p>`);
+    }
+  }
+
+  if (eventSource.readyState == 1) {
+    eventSource.close();
+    clearInterval(eventSourceInterval);
+    $("#fps").html(0);
+    logError(`Request stopped!<br><br>
+      Start: ${new Date(streamedData.timestamp[0]).toLocaleString()} <br>
+      Stop: ${new Date(streamedData.timestamp[streamedData.timestamp.length-1]).toLocaleString()} <br>
+    `);
+  }
 }
 
 // when "Reset" button pressed
@@ -138,6 +159,7 @@ function reset() {
   logError("");
   log("");
   $("#fileName").html("");
+  $("#fps").html(0);
   collectedData = {
     alfa: [],
     beta: [],
@@ -389,6 +411,11 @@ function initPlot() {
 // jQuery
 
 $(function () {
+
+  $("#fps").html(0);
+  logError("");
+  log("");
+
   // Initialize the chart when the page loads
   initPlot();
 

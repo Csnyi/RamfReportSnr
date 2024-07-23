@@ -228,16 +228,17 @@ function toggleModal(){
 /** load Chart */
 // Convert timestamps to local time strings
 
+let timeZone = new Date().getTimezoneOffset();
+
 function convertTimestamps(timestamps, lock) {
-    let lockLine = convertLock(lock);
-    let timeZone = new Date().getTimezoneOffset();
+    let lockLine = lock.map(e => (e === 1) ? 'Locked' : 'Not locked');
     let timeLine = timestamps.map(ts => new Date(ts-(timeZone*60*1000)).toISOString());
     return timeLine.map((value, index) => `${value} - ${lockLine[index]}`);
 }
 
-function convertLock(lock) {
+/* function convertLock(lock) {
     return lock.map(e => (e === 1) ? 'Locked' : 'Not locked');
-}
+} */
   
   // Update the charts with new data
 function updateChartJson(data) {
