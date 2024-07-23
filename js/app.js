@@ -128,7 +128,7 @@ function start() {
 // when "Stop" button pressed
 function stop() { 
   if (eventSource == undefined) {
-     logError(`<p class="warn">Not runing!</p>`);
+     logError(`<p class="warn">No request!</p>`);
   }
 
   if (eventSource.readyState == 2) {
@@ -138,7 +138,7 @@ function stop() {
         Stop: ${new Date(streamedData.timestamp[streamedData.timestamp.length-1]).toLocaleString()} <br>
       `);
     }else{
-      logError(`<p class="warn">Not runing!</p>`);
+      logError(`<p class="warn">No request!</p>`);
     }
   }
 

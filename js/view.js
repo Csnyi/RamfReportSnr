@@ -235,10 +235,6 @@ function convertTimestamps(timestamps, lock) {
     let timeLine = timestamps.map(ts => new Date(ts-(timeZone*60*1000)).toISOString());
     return timeLine.map((value, index) => `${value} - ${lockLine[index]}`);
 }
-
-/* function convertLock(lock) {
-    return lock.map(e => (e === 1) ? 'Locked' : 'Not locked');
-} */
   
   // Update the charts with new data
 function updateChartJson(data) {
