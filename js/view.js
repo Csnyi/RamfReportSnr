@@ -230,7 +230,8 @@ function toggleModal(){
 
 function convertTimestamps(timestamps, lock) {
     let lockLine = convertLock(lock);
-    let timeLine = timestamps.map(ts => new Date(ts).toISOString());
+    let timeZone = new Date().getTimezoneOffset();
+    let timeLine = timestamps.map(ts => new Date(ts-(timeZone*60*1000)).toISOString());
     return timeLine.map((value, index) => `${value} - ${lockLine[index]}`);
 }
 

@@ -12,6 +12,7 @@ let collectedData = {
 };
 let streamedData = {
     timestamp: [],
+    lock: [],
     snr: [],
     lm_snr: [],
     lnb_voltage: [],
@@ -19,7 +20,6 @@ let streamedData = {
     alfa: [],
     beta: [],
     gamma: [],
-    lock: [],
     lnb_current: []
 };
 let eventSourceInterval;
@@ -170,6 +170,7 @@ function processData() {
   if (collectedData.snr.length > 0) {
     $("#fps").html(fpsCounter);
 
+    let infoLock = lockInfo(collectedData.lock);
     let avgSnr = average(collectedData.snr);
     let avgLmSnr = average(collectedData.lm_snr);
     let avgLnbVoltage = average(collectedData.lnb_voltage);
@@ -177,12 +178,12 @@ function processData() {
     let avgAlfa = average(collectedData.alfa);
     let avgBeta = average(collectedData.beta);
     let avgGamma = average(collectedData.gamma);
-    let infoLock = lockInfo(collectedData.lock);
     let avgLnbCurrent = average(collectedData.lnb_current);
 
     //data to json end xlsx
     let timeStamp = new Date().getTime();
     streamedData.timestamp.push(timeStamp);
+    streamedData.lock.push(average(collectedData.lock));
     streamedData.snr.push(avgSnr);
     streamedData.lm_snr.push(avgLmSnr);
     streamedData.lnb_voltage.push(avgLnbVoltage);
@@ -190,7 +191,6 @@ function processData() {
     streamedData.alfa.push(avgAlfa);
     streamedData.beta.push(avgBeta);
     streamedData.gamma.push(avgGamma);
-    streamedData.lock.push(average(collectedData.lock));
     streamedData.lnb_current.push(avgLnbCurrent);
 
     // set time of measure
@@ -305,7 +305,8 @@ function logError(msg) {
 // update the graph with data every second 
 function updateChart(infoLock, avgSnr, avgLmSnr, avgLnbVoltage, avgPsuVoltage) {
   const now = new Date();
-  const timeLine = now.toISOString(); // Use toISOString for time label
+  const nowZone = now.getTimezoneOffset();
+  const timeLine = new Date(now.getTime()-(nowZone*60*1000)).toISOString(); // Use toISOString for time label
   const timeLabel = `${timeLine} - ${infoLock}`; 
 
   Plotly.extendTraces('snrChart', {
