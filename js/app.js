@@ -195,8 +195,8 @@ function processData() {
     let infoLock = lockInfo(collectedData.lock);
     let avgSnr = average(collectedData.snr);
     let avgLmSnr = average(collectedData.lm_snr);
-    let avgLnbVoltage = average(collectedData.lnb_voltage);
-    let avgPsuVoltage = average(collectedData.psu_voltage);
+    let avgLnbVoltage = average(collectedData.lnb_voltage, 0);
+    let avgPsuVoltage = average(collectedData.psu_voltage, 0);
     let avgAlfa = average(collectedData.alfa);
     let avgBeta = average(collectedData.beta);
     let avgGamma = average(collectedData.gamma);
@@ -223,10 +223,10 @@ function processData() {
    
     log(`<p>Processed Data: ${countResponse++} </p>
       <div class="warn"> Current data: <br>
-      Alfa: ${avgAlfa.toFixed(2)}°, <br>
-      Beta: ${avgBeta.toFixed(2)}°, <br>
-      Gamma: ${avgGamma.toFixed(2)}°, <br>
-      LNB Current: ${avgLnbCurrent.toFixed(2)} mA 
+      Alfa: ${avgAlfa}°, <br>
+      Beta: ${avgBeta}°, <br>
+      Gamma: ${avgGamma}°, <br>
+      LNB Current: ${avgLnbCurrent} mA 
     </div>`);
     
     updateChart(infoLock, avgSnr, avgLmSnr, avgLnbVoltage, avgPsuVoltage); // Update the chart with the new average values
@@ -247,9 +247,10 @@ function processData() {
   }
 }
 
-function average(dataArray) {
+function average(dataArray, n = 2) {
   let sum = dataArray.reduce((a, b) => a + b, 0);
-  return sum / dataArray.length;
+  let avg = sum / dataArray.length;
+  return parseFloat(avg.toFixed(n));
 }
 
 function lockInfo(infos) {
