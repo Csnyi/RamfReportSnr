@@ -1,16 +1,17 @@
 let eventSource;
 let collectedData = {
-    alfa: [],
-    beta: [],
-    gamma: [],
     lock: [],
-    lnb_current: [],
     snr: [],
     lm_snr: [],
     lnb_voltage: [],
-    psu_voltage: []
+    psu_voltage: [],
+    alfa: [],
+    beta: [],
+    gamma: [],
+    lnb_current: []
 };
 let streamedData = {
+    tpVal: "",
     timestamp: [],
     lock: [],
     snr: [],
@@ -26,6 +27,7 @@ let eventSourceInterval;
 let countResponse = 1;
 let countWait = 1;
 let fpsCounter = 0;
+let tpData = '';
 
 // IP input container
 var ipContent = document.getElementById("ip");
@@ -52,6 +54,7 @@ function initSmartSNR() {
   var tone = document.getElementById("tone").value;
   var dsq = document.getElementById("dsq").value;
   var slnbe = document.getElementById("slnbe").value;
+  tpData = `${freq} ${pol==0?'H':'V'} ${sr}`;
   var url = new URL('http://' + ip + '/public');
   var params = {
     command: 'initSmartSNR',
@@ -78,6 +81,8 @@ function initSmartSNR() {
 // when "Start" button pressed
 
 function start() { 
+  reset();
+
   initSmartSNR();
 
   let ip = localStorage.getItem("ip");
@@ -151,6 +156,9 @@ function stop() {
       Stop: ${new Date(streamedData.timestamp[streamedData.timestamp.length-1]).toLocaleString()} <br>
     `);
   }
+
+  streamedData.tpVal = tpData; 
+
 }
 
 // when "Reset" button pressed
@@ -161,18 +169,7 @@ function reset() {
   $("#fileName").html("");
   $("#fps").html(0);
   collectedData = {
-    alfa: [],
-    beta: [],
-    gamma: [],
     lock: [],
-    lnb_current: [],
-    snr: [],
-    lm_snr: [],
-    lnb_voltage: [],
-    psu_voltage: []
-  };
-  streamedData = {
-    timestamp: [],
     snr: [],
     lm_snr: [],
     lnb_voltage: [],
@@ -180,12 +177,25 @@ function reset() {
     alfa: [],
     beta: [],
     gamma: [],
+    lnb_current: []
+  };
+  streamedData = {
+    tpVal: "",
+    timestamp: [],
     lock: [],
+    snr: [],
+    lm_snr: [],
+    lnb_voltage: [],
+    psu_voltage: [],
+    alfa: [],
+    beta: [],
+    gamma: [],
     lnb_current: []
   };
   countResponse = 1;
   countWait = 1;
   fpsCounter = 0;
+  tpData = '';
 }
 
 function processData() {
@@ -330,7 +340,7 @@ function updateChart(infoLock, avgSnr, avgLmSnr, avgLnbVoltage, avgPsuVoltage) {
   const now = new Date();
   const nowZone = now.getTimezoneOffset();
   const timeLine = new Date(now.getTime()-(nowZone*60*1000)).toISOString(); // Use toISOString for time label
-  const timeLabel = `${timeLine} - ${infoLock}`; 
+  const timeLabel = `${timeLine} - ${tpData} - ${infoLock}`; 
 
   Plotly.extendTraces('snrChart', {
     x: [[timeLabel], [timeLabel]],

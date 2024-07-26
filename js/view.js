@@ -230,15 +230,15 @@ function toggleModal(){
 
 let timeZone = new Date().getTimezoneOffset();
 
-function convertTimestamps(timestamps, lock) {
+function convertTimestamps(timestamps, tpval, lock) {
     let lockLine = lock.map(e => (e === 1) ? 'Locked' : 'Not locked');
     let timeLine = timestamps.map(ts => new Date(ts-(timeZone*60*1000)).toISOString());
-    return timeLine.map((value, index) => `${value} - ${lockLine[index]}`);
+    return timeLine.map((value, index) => `${value} - ${tpval} - ${lockLine[index]}`);
 }
   
   // Update the charts with new data
 function updateChartJson(data) {
-    let timeLabels = convertTimestamps(data.timestamp, data.lock);
+    let timeLabels = convertTimestamps(data.timestamp, data.tpVal, data.lock);
   
     // Update SNR chart
     Plotly.react('snrChart', [{
