@@ -80,10 +80,17 @@ function initSmartSNR() {
 
 // when "Start" button pressed
 
-function start() { 
+function start() {
+  if (eventSource) {
+    eventSource.close();
+    clearInterval(eventSourceInterval);
+  }
+
   reset();
 
   initSmartSNR();
+
+  streamedData.tpVal = tpData; 
 
   let ip = localStorage.getItem("ip");
   eventSource = new EventSource(`http://${ip}/public?command=startEvents`);
@@ -156,8 +163,6 @@ function stop() {
       Stop: ${new Date(streamedData.timestamp[streamedData.timestamp.length-1]).toLocaleString()} <br>
     `);
   }
-
-  streamedData.tpVal = tpData; 
 
 }
 
@@ -242,15 +247,15 @@ function processData() {
     updateChart(infoLock, avgSnr, avgLmSnr, avgLnbVoltage, avgPsuVoltage); // Update the chart with the new average values
 
     // Clear the collected data for the processed keys
-    collectedData.alfa = [];
-    collectedData.beta = [];
-    collectedData.gamma = [];
     collectedData.lock = [];
-    collectedData.lnb_current = [];
     collectedData.snr = [];
     collectedData.lm_snr = [];
     collectedData.lnb_voltage = [];
     collectedData.psu_voltage = [];
+    collectedData.alfa = [];
+    collectedData.beta = [];
+    collectedData.gamma = [];
+    collectedData.lnb_current = [];
     fpsCounter = 0;
   } else {
     log(`Waiting for a response from the server. ${countWait++} sec`);
@@ -278,14 +283,15 @@ function nameGenerator() {
   let fString = Number($("#freq").val());
   let srString = Number($("#sr").val());
   let pString = $("#pol").val();
-  let result = `${dString}freq${fString}_sr${srString}_pol${pString}`;
+  let result = `${dString}_${fString}${pString==0?'H':'V'}${srString}`;
   return result;
 }
 
 // Function to download collected data as JSON
 function downloadDataAsJSON() {
   const keys = Object.keys(streamedData);
-  const length = streamedData[keys[0]].length;
+  const length = streamedData[keys[1]].length;
+  console.log(streamedData[keys[1]]);
   if (length > 0) {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(streamedData));
     const downloadAnchorNode = document.createElement('a');
@@ -296,14 +302,14 @@ function downloadDataAsJSON() {
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
   }else{
-    logError(`<div class="alert">No data available!</div>`)
+    logError(`<div class="alert">No data available!</div>`);
   }
 }
 
 // Function to convert JSON data to Excel and download
 function downloadDataAsExcel() {
   const keys = Object.keys(streamedData);
-  const length = streamedData[keys[0]].length; 
+  const length = streamedData[keys[1]].length; 
   if (length > 0) {  
     const dataArray = [];
     for (let i = 0; i < length; i++) {
