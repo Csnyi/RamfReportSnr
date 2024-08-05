@@ -32,6 +32,7 @@ let tpData = '';
 // IP input container
 var ipContent = document.getElementById("ip");
 ipContent.addEventListener("change", function(){
+  reset();
   var ipValid = isValidIP(ipContent.value);
   !ipValid ? alert("Invalid IP: "+ ipContent.value +"!"): localStorage.setItem("ip", ipContent.value);
 }); 
@@ -429,9 +430,7 @@ function initPlot() {
 
 $(function () {
 
-  $("#fps").html(0);
-  logError("");
-  log("");
+  reset();
 
   // Initialize the chart when the page loads
   initPlot();
